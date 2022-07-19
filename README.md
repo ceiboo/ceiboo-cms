@@ -14,7 +14,7 @@ En tu archivo /etc/hosts incluir las siguientes lineas
 - Test de instalación en navegador:
 * `http://api.ceiboo.jla/api/status`
 
-### Importar datos de correo ###
+### Crear estructura de datos ###
 * `docker-compose exec ceiboo-cms php artisan migrate:fresh`
 
 
