@@ -1,0 +1,53 @@
+version: "3.7"
+services:
+    ceiboo-cms:
+        build:
+            args:
+                user: ceiboo
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: ceiboo-cms
+        container_name: ceiboo-cms-php
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            ceiboo-cms-net:
+                ipv4_address: 172.10.2.4
+
+    dbsystem:
+        image: mysql:5.7
+        container_name: ceiboo-cms-system
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ceiboo-cms-system
+            MYSQL_ROOT_PASSWORD: xt378lpr3_t
+            MYSQL_PASSWORD: ROx9NW?s_Xab34y
+            MYSQL_USER: admin
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            ceiboo-cms-net:
+                ipv4_address: 172.10.2.3
+    nginx:
+        image: nginx:alpine
+        container_name: ceiboo-cms-nginx
+        restart: unless-stopped
+        ports:
+            - 80:80
+        volumes:
+            - ./:/var/www
+            - ./.docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            ceiboo-cms-net:
+                ipv4_address: 172.10.2.2
+
+networks:
+    ceiboo-cms-net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.10.2.0/23
